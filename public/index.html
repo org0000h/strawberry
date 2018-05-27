@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Link to external CSS file -->
+        <link rel="stylesheet" href="stylesheets/style.css">
+        <!-- JavaScript & No-JavaScript tags -->
+        <script src="javascripts/vue.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script  defer src="javascripts/client.js"></script>
+        <title>my web</title>
+        
+    </head>
+    <body>
+        <h1 v-if="seen" id = "main" class="title">Hyuganatsu Studio</h1>  
+        <p></p>
+        <div style="text-align:center">
+          <a   href = "https://github.com/org0000h"  target = "_blank" class="bt"  >Github</a>
+        </div>
+        <p></p>
+
+        <div id="app">
+          <transition  name="slide-fade">
+            <div v-if="seen" style="text-align:center"> 
+              <button   class="bt" @click="leave">click here to let me go</button>
+            </div>
+          </transition>
+          <input  v-model="messageInput"
+                  class="inputMessage" 
+                  type="text"
+                  maxlength="14" 
+                  @keyup.enter="pressEnter"
+                  @focus='clean'>
+          </input>
+          <div v-for="iterm in messages">
+              <p class="msg" v-if="show">{{ iterm }}</p>
+          </div>
+        </div>
+    </body>
+</html>

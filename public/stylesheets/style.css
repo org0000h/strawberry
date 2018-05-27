@@ -1,0 +1,67 @@
+
+body{
+  background-image : url('../images/backimage.jpg');
+  background-repeat:no-repeat;
+  font-family:Helvetica;
+}
+
+.link {
+  color: rgb(248, 118, 78) ;
+  text-decoration: none;
+
+}
+
+.title{
+  text-align:center;
+  font-family:Helvetica;
+  color: rgb(252, 158, 71); /* 字颜色 */
+}
+
+.bt{
+  background-color:#f44336; /* 背景色 */
+  color: white; /* 按钮字颜色 */
+  border: none;/* 边框 */
+  /*width: 100%; 宽度 */
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none; /* 没有下划线 */
+  display: inline-block;
+  font-size: 16px; /* 按钮大小 */
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari 鼠标悬停触发时间 */
+  transition-duration: 0.4s;/* 鼠标悬停触发时间 */
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);/* 阴影 */
+  border-radius: 2px;/* 圆角 */
+}
+.bt:hover{/* 鼠标悬停后会改变的的样式 */
+  background-color: #ec0909; /* 背景色 */
+  color: white;
+}
+.bt:active{
+  transform: translateY(4px);
+  box-shadow: none;/* 阴影 */
+}
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .10s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+.gh-btn {
+  display:inline-block;
+  width: 100px;
+  height:40px;
+  background-image:url("../github.png") no-repeat fixed 10px center;
+  text-indent:35px;
+}
+.msg {
+  color: rgb(255, 255, 255)
+}
