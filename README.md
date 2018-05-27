@@ -1,8 +1,8 @@
-# newServer
+# newWebApp
 start up
 
 ```
-cd newServer/
+cd newWebApp/
 
 node bin/www 
 
