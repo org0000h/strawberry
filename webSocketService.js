@@ -1,9 +1,9 @@
 'use strict';
 
 // start websocket service with socket.io object
-function webSocketService(io){
+function webSocketService(io) {
     // if connected , execute function
-    io.on('connection', function(socket){
+    io.on('connection', function (socket) {
         let numUsers = 0;
         let addedUser = false;
         // when the client emits 'add user', this listens and executes
