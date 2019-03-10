@@ -18,8 +18,8 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 //tls key and crt
-let privateKey  = fs.readFileSync(__dirname + '/../ssl_cert/ca_self_signed/server_rsa_private_key.pem', 'utf8');
-let certificate = fs.readFileSync(__dirname + '/../ssl_cert/ca_self_signed/server_crt.pem', 'utf8');
+let privateKey  = fs.readFileSync(__dirname + '/../ecc_cert/ecc.key', 'utf8');
+let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
 let credentials = {key: privateKey, cert: certificate};
 
 /**
