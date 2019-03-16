@@ -8,7 +8,7 @@ var app = new Vue({
   data: {
     seen: true,
     show: false,
-    messageInput:"What's your nick name?",
+    messageInput:"type by websocket",
     message:'',
     messages:[''], 
   },
