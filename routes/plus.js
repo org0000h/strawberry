@@ -1,14 +1,15 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
 /* GET plus listing. */
 router.get('/',function (req,res,next) {
-    var answer = parseInt(req.query.a) + parseInt(req.query.b);
+    let answer = parseInt(req.query.a) + parseInt(req.query.b);
     console.log((req.query.a));
     console.log((req.query.b));
-    asn = 'a+b= ';
-
-    res.send(asn + answer.toString());
+    let res_json = {
+        "a+b":answer
+    }
+    res.json(res_json);
 })
 
 module.exports = router;
