@@ -7,8 +7,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/persistence/test.js",
+            "env":{
+                "NODE_ENV": "test"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "startServer",
-            "program": "${workspaceFolder}/bin/www"
+            "program": "${workspaceFolder}/bin/www",
+            "env":{
+                "NODE_ENV": "test"
+            }
         }
     ]
 }
