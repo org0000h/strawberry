@@ -1,0 +1,8 @@
+version: '3'
+services:
+  strawberry:
+    build: .
+    # image: strawberry0.2
+    ports:
+    - "4433:3000"
+

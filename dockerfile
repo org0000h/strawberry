@@ -1,5 +1,7 @@
 FROM node:10.15.3
-COPY . /app
-WORKDIR /app
-# RUN npm install 
+COPY . /strawberry
+WORKDIR /strawberry
+RUN npm install 
+# RUN npm install --registry=https://registry.npm.taobao.org
 EXPOSE 3000
+CMD [ "npm", "start" ]
