@@ -21,7 +21,7 @@ Automatic deployment by docker-compose,run cmd below:
 ```
 docker-compose up
 ```
-Use URI https://localhost:4433 to access the container
+Use URI https://localhost:4433 to access the container,
 log:
 ```
 PS R:\DATA\project\strawberry> docker-compose up
