@@ -1,27 +1,10 @@
 # strawberry
-start up
-
-```
-cd newWebApp/
-npm start
-
-```
-or
-```
-cd newWebApp/
-node bin/www 
-
-```
-Use URI https://localhost:3000 to access the server
-
-This server also supports websocket by socket.io 
-
-# For docker 
-Automatic deployment by docker-compose,run cmd below:
+start up with docker,
+automatic deployment by docker-compose,run cmd below:
 ```
 docker-compose up
 ```
-Use URI https://localhost:4433 to access the container
+Use URI https://localhost:4433 to access the container,
 log:
 ```
 PS R:\DATA\project\strawberry> docker-compose up
@@ -61,7 +44,25 @@ strawberry_1  |
 strawberry_1  | listening on port:3000
 ```
 
-Or you just want to type by hand :
+or just run in local host computer using:
+```
+cd strawberry/
+npm start
+
+```
+or
+```
+cd strawberry/
+node bin/www 
+
+```
+Use URI https://localhost:3000 to access the server
+
+This server also supports websocket by socket.io 
+
+
+# some helpful docker cmd
+
 ```
 docker image build -t strawberry .
 
