@@ -1,7 +1,9 @@
 # strawberry
 A fast webApp framwork by vue.js, Express and socket.io on a nodejs server supporting https and websocket.
 
-Start up with docker,automatic deployment by docker-compose.Run cmd below to start the server:
+Start up with docker,automatic deployment by docker-compose.
+
+Run cmd below to start the server:
 ```
 git clone https://github.com/org0000h/strawberry.git
 cd strawberry
