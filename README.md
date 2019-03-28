@@ -17,7 +17,7 @@ clone this repository and run these cmd:
 ```
 git clone https://github.com/org0000h/strawberry.git
 cd strawberry
-docker-compose up
+docker-compose -f "docker-compose-debug-brk.yml" up
 ```
 Then open folder "strawberry" in vscode.
 

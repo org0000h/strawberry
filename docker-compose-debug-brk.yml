@@ -8,6 +8,6 @@ services:
     - "9229:9229"
     command:
       - node
-      - "--inspect=0.0.0.0"
+      - "--inspect-brk=0.0.0.0"
       - "bin/www" 
 
