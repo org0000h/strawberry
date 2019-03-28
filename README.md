@@ -1,11 +1,28 @@
 # strawberry
-start up with docker,
-automatic deployment by docker-compose,run cmd below:
+A fast webApp framwork by vue.js, Express and socket.io on a nodejs server supporting https and websocket.
+
+Start up with docker,automatic deployment by docker-compose.Run cmd below to start the server:
 ```
+git clone https://github.com/org0000h/strawberry.git
+cd strawberry
 docker-compose up
 ```
-Use URI https://localhost:4433 to access the container,
-log:
+Use URI https://localhost:4443 to access the server in docker container
+
+# debug in VSCode
+
+clone this repository and run these cmd:
+```
+git clone https://github.com/org0000h/strawberry.git
+cd strawberry
+docker-compose up
+```
+Then open folder "strawberry" in vscode.
+
+Chose debug configurations as "Attach docker".
+Press F5,then happy debuging in vscode attach to the docker container. 
+
+server starting log:
 ```
 PS R:\DATA\project\strawberry> docker-compose up
 Building strawberry
@@ -44,22 +61,22 @@ strawberry_1  |
 strawberry_1  | listening on port:3000
 ```
 
-or just run in local host computer using:
+# Run without docker
+just run in local host computer using:
 ```
+git clone https://github.com/org0000h/strawberry.git
 cd strawberry/
 npm start
 
 ```
 or
 ```
+git clone https://github.com/org0000h/strawberry.git
 cd strawberry/
 node bin/www 
 
 ```
 Use URI https://localhost:3000 to access the server
-
-This server also supports websocket by socket.io 
-
 
 # some helpful docker cmd
 
