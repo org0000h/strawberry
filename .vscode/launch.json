@@ -6,6 +6,12 @@
     "configurations": [
         {
             "type": "node",
+            "request": "launch",
+            "name": "async_wrapper",
+            "program": "${workspaceFolder}/async_wrapper.js"
+        },
+        {
+            "type": "node",
             "request": "attach",
             "name": "Attach docker",
             "port": 9229,
@@ -22,7 +28,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "sequelize test",
             "program": "${workspaceFolder}/persistence/test.js",
             "env":{
                 "NODE_ENV": "test"
@@ -33,6 +39,13 @@
             "request": "launch",
             "name": "startServer",
             "program": "${workspaceFolder}/bin/www",
+            "protocol": "inspector",
+            "runtimeArgs": [// args passed to node
+                "--inspect-brk",
+                // "${workspaceRoot}/node_modules/.bin/jest",
+            ],
+            "args": [],// args passed to program (www here)
+            "port": 9229,
             "env":{
                 "NODE_ENV": "test"
             }
