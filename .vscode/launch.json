@@ -42,6 +42,7 @@
             "protocol": "inspector",
             "runtimeArgs": [// args passed to node
                 "--inspect-brk",
+                "--async-stack-traces"
                 // "${workspaceRoot}/node_modules/.bin/jest",
             ],
             "args": [],// args passed to program (www here)
