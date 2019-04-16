@@ -4,7 +4,6 @@ let
     User = models.user;
 
 (async () => {
-    await db.sync();
     var user = await User.create({
         username: 'John',
         birthday: '2007-07-07'
