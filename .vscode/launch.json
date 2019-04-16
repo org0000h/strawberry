@@ -4,41 +4,60 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "https_websocket_server_launcher",
+            "program": "${workspaceFolder}/launcher/https_websocket_server_launcher.js",
+            "env":{
+                "NODE_ENV": "test"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "http_server_launcher",
+            "program": "${workspaceFolder}/launcher/http_server_launcher.js",
+            "env":{
+                "NODE_ENV": "test",
+                "PORT":"7890"
+            }
+        },
         {
             "type": "node",
             "request": "launch",
             "name": "current file",
-            "program": "${file}"
-        },
-    {
-        "name": "Attach docker",
-        "type": "node",
-        "request": "attach",
-        "port": 9229,
-        "address": "localhost",
-        "restart": true,
-        "sourceMaps": false,
-        "outDir": null,
-        "localRoot": "${workspaceRoot}",
-        "remoteRoot": "/wishapp"
-    },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/persistence/test.js",
+            "program": "${file}",
             "env":{
-                "NODE_ENV": "test"
+                "NODE_ENV": "test",
+                "PORT":"7890"
             }
+            
+        },
+        {
+            "name": "Attach docker",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "address": "localhost",
+            "restart": true,
+            "sourceMaps": false,
+            "outDir": null,
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/wishapp"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "startServer",
-            "program": "${workspaceFolder}/bin/www",
-            "env":{
-                "NODE_ENV": "test"
-            }
-        }
+            "name": "high_concurrency_https_websocket_server_launcher",
+            "runtimeArgs": [
+                "--nouse-idle-notification",
+                "--max-old-space-size=8192",
+                // "--expose-gc", 
+                // "--max-new-space-size=2048", 
+            ],
+            "program": "${workspaceFolder}/launcher/high_concurrency_https_websocket_server_launcher.js"
+        },
     ]
 }
