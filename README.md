@@ -47,13 +47,8 @@ strawberry_1  | listening on port:3000
 or just run in local host computer using:
 ```
 cd strawberry/
+npm install
 npm start
-
-```
-or
-```
-cd strawberry/
-node bin/www 
 
 ```
 Use URI https://localhost:3000 to access the server
