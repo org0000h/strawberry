@@ -9,5 +9,5 @@ services:
     command:
       - node
       - "--inspect-brk=0.0.0.0"
-      - "bin/www" 
+      - "launcher/https_websocket_server_launcher.js" 
 
