@@ -68,3 +68,7 @@ docker save strawberry -o strawberry_dockerImage.tar
 docker run  --rm -it -p 8000:3000/tcp strawberry node bin/www
 ```
 
+todo 
+- user login/logout
+- auth(jwt)
+
