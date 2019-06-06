@@ -7,7 +7,6 @@ services:
     - "443:3000"
     - "9229:9229"
     command:
-      - node
-      - "--inspect-brk=0.0.0.0"
-      - "bin/www" 
+      npm start
+      # - npm run debug
 
