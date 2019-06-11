@@ -6,7 +6,7 @@ const db = require('./db');
 require("../persistence/loadModels");
 const {
   normalizePort,
-  onError,
+  generateOnError,
 } = require('./for_launcher');
 
 https.globalAgent.maxSockets = 40000;
@@ -20,7 +20,7 @@ let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
 let credentials = {key: privateKey, cert: certificate};
 
 var server = https.createServer(credentials,app);
-
+let onError = generateOnError();
 server.on('error', onError);
 server.on('listening',()=>{
   console.log('listening on port:' + port);

@@ -8,7 +8,7 @@ const db = require('../persistence/db');
 require("../persistence/loadModels");
 const {
   normalizePort,
-  onError,
+  generateOnError,
 } = require('./for_launcher');
 
 https.globalAgent.maxSockets = 40000;
@@ -25,7 +25,7 @@ var server = https.createServer(credentials,app);
 
 let io = socket_io(server);
 webSocketService(io);
-
+let onError = generateOnError();
 server.on('error', onError);
 server.on('listening',()=>{
   console.log('listening on port:' + port);
