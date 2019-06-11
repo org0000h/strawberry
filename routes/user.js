@@ -3,8 +3,7 @@ let router = express.Router();
 let jwt = require('jsonwebtoken');
 let crypto = require('crypto');
 let userModel = require('../persistence/models/user');
-
-// REST API
+let auth = require("../others/auth");
 router.post('/user/login', userLoginRouter);
 
 //=====================================================================
@@ -72,20 +71,7 @@ function isInputLoginComplete(req){
     }
 }
 
-function generateTokenPayload(userId,version){
-  let payload = {
-    "userId" : userId,
-    exp : 1,
-    token_version : version 
-  }
-  return JSON.stringify(payload);
-}
 
-function generatSecret(payload, salt){
-  let hash = crypto.createHmac('sha256', salt); /** Hashing algorithm sha256 */
-  hash.update(payload);
-  return  hash.digest('hex');
-}
 
 function saveVersion(version, userm){
   userm.update({ token_version: version});
@@ -151,9 +137,10 @@ async function  userLoginRouter(req, res){
     }
     let userTokenVersion = Date.now();
     saveVersion(userTokenVersion,userm);
-    let tokenPayload = generateTokenPayload(user.userId,userTokenVersion);
-    let secret = generatSecret(tokenPayload, SALT);
-    
+    let tokenPayload = auth.generateTokenPayload(user.userId,userTokenVersion);
+ 
+    let secret = await auth.generatSecret(tokenPayload, SALT);
+
     let token = generateToken(secret, user.userId, userTokenVersion);
     NormalResponseUserLogin(res, token);
     return;
