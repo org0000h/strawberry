@@ -6,8 +6,7 @@ let userModel = require('../persistence/models/user');
 let auth = require("../others/auth");
 router.post('/user/login', userLoginRouter);
 
-//=====================================================================
-SALT = "salt_12356";
+SALT = "salt9900";
 
 class REQ_USER{
   constructor(req, userm){
@@ -36,27 +35,6 @@ class REQ_USER{
 
   isExist(){
     return this.exist;
-  }
-
-  isLogedin(req,secret,userBackendTokenVersion){
-    if(req.headers.authorization == undefined){
-      return false;
-    }
-    if(!this.exist){
-      return false;
-    }
-    jwt.verify(req.headers.authorization.split(' ')[1], secret, function(err, decoded) {
-      console.log(err,decoded);
-      if(err == null){ // valid token
-        if(decoded.token_version == userBackendTokenVersion){// Not expired
-          return true;
-        }else{
-          return false;
-        }
-      }else{
-        return false;
-      }
-    });
   }
 }
 
@@ -111,42 +89,43 @@ function generateToken(secret, userId, version){
 async function  userLoginRouter(req, res){
   console.log("login:",req.body);
   let errRes = {};
-  do{
+  try{
     if(!isInputLoginComplete(req)){
-      errRes.message = "request not complete";
+      let err = new Error("request not complete");
       errRes.code = 400;
       console.log(errRes.message);
-      break;
+      throw err;
     }
 
     let userm = await userModel.findOne({ where: {user_id:req.body.userId} });
     let user = new REQ_USER(req,userm);
 
     if(!user.isExist()){
-      errRes.message = "user not exist";
+      let err = new Error("user not exist");
       errRes.code = 404;
       console.log(errRes.message);
-      break;
+      throw err;
     }
     
     if(!user.isMatchPasswd(req.body.password)){
-      errRes.message = "user wrong password";
+      let err = new Error("user wrong password");
       errRes.code = 401;
       console.log(errRes.message);
-      break;
+      throw err;
     }
     let userTokenVersion = Date.now();
     saveVersion(userTokenVersion,userm);
-    let tokenPayload = auth.generateTokenPayload(user.userId,userTokenVersion);
+    let tokenPayload = auth.createTokenPayload(user.userId,userTokenVersion);
  
-    let secret = await auth.generatSecret(tokenPayload, SALT);
+    let secret = await auth.createSecret(tokenPayload, SALT);
 
     let token = generateToken(secret, user.userId, userTokenVersion);
     NormalResponseUserLogin(res, token);
     return;
-  }while(0);
+  }catch(err){
+    ErrResponse(res, err);
+  }
 
-  ErrResponse(res, errRes);
 }
 
 function userLogout(req, res){
