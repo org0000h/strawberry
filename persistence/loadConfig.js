@@ -1,25 +1,15 @@
-const defaultConfig = './config-default.js';
-const overrideConfig = './config-override.js';
-const testConfig = './config-test.js';
-
+const Config_release = './config_release';
+const Config_dev = './config_dev';
 const fs = require('fs');
 
 var config = null;
 
 if (process.env.NODE_ENV === 'test') {
-    console.log(`Load ${testConfig}...`);
-    config = require(testConfig);
+    console.log(`Load dataBase config ${Config_dev}...`);
+    config = require(Config_dev);
 } else {
-    console.log(`Load ${defaultConfig}...`);
-    config = require(defaultConfig);
-    try {
-        if (fs.statSync(overrideConfig).isFile()) {
-            console.log(`Load ${overrideConfig}...`);
-            config = Object.assign(config, require(overrideConfig));
-        }
-    } catch (err) {
-        console.log(`Cannot load ${overrideConfig}.`);
-    }
+    console.log(`Load dataBase config ${Config_release}...`);
+    config = require(Config_release);
 }
 
 module.exports = config;
