@@ -4,6 +4,8 @@ let jwt = require('jsonwebtoken');
 let crypto = require('crypto');
 let userModel = require('../persistence/models/user');
 let auth = require("../others/auth");
+
+//REST API
 router.post('/user/login', userLoginRouter);
 
 SALT = "salt9900";
@@ -23,8 +25,7 @@ class REQ_USER{
 
   isMatchPasswd(passwd){
     if(this.exist){
-      if(passwd == this.password){
-        return true;
+      if(passwd == this.password){ return true;
       }else{
         return false;
       }
