@@ -10,6 +10,7 @@
             "program": "${workspaceFolder}/launcher/launcher_https_websocket_server.js",
             "env":{
                 // "NODE_ENV": "dev"
+                 "RDB": "has"
             }
         },
         {
@@ -19,7 +20,8 @@
             "program": "${workspaceFolder}/launcher/launcher_http_server.js",
             "env":{
                 "NODE_ENV": "dev",
-                "PORT":"4443"
+                "PORT":"4443",
+                "RDB": "has"
             }
         },
         {
@@ -46,7 +48,8 @@
             ],
             "env":{
                 "NODE_ENV": "concurrency",
-                "PORT":"443"
+                "PORT":"443",
+                "RDB": "has"
             },
             "program": "${workspaceFolder}/launcher/launcher_https_websocket_high_concurrency_server.js"
         },

@@ -2,8 +2,6 @@
 const app = require('../app');
 const https = require('https');
 const fs = require('fs');
-const db = require('./db');
-require("../persistence/loadModels");
 const {
   normalizePort,
   generateOnError,
@@ -26,11 +24,18 @@ server.on('listening',()=>{
   console.log('listening on port:' + port);
 });
 
-db.sync()
-.then(()=>{
-    console.log("\r\n Data base init done");process.exit(0);
-    server.listen(port);
-})
-.catch((e) => { 
-    console.log(`failed:${e}`); process.exit(0); 
-});
+if (process.env.RDB === 'has') {
+  const db = require('../persistence/db');
+  require("../persistence/loadModels");
+  db.sync()
+  .then(()=>{
+      console.log("\r\n Data base init done");
+      server.listen(port);
+  })
+  .catch((e) => { 
+      console.log(`failed:${e}`); process.exit(0); 
+  });
+
+}else{
+  server.listen(port);
+}
