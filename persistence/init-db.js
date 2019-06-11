@@ -1,4 +1,3 @@
-const model = require('./models/user');
 const db = require('./db');
 
 db.sync()
@@ -8,3 +7,5 @@ db.sync()
 .catch((e) => { 
     console.log(`failed:${e}`); process.exit(0); 
 });
+
+module.exports = db

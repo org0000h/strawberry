@@ -2,6 +2,8 @@
 const app = require('../app');
 const https = require('https');
 const fs = require('fs');
+const db = require('./db');
+require("../persistence/loadModels");
 const {
   normalizePort,
   onError,
@@ -19,8 +21,16 @@ let credentials = {key: privateKey, cert: certificate};
 
 var server = https.createServer(credentials,app);
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening',()=>{
   console.log('listening on port:' + port);
+});
+
+db.sync()
+.then(()=>{
+    console.log("\r\n Data base init done");process.exit(0);
+    server.listen(port);
+})
+.catch((e) => { 
+    console.log(`failed:${e}`); process.exit(0); 
 });

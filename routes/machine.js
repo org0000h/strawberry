@@ -1,40 +1,77 @@
 let express = require('express');
 let router = express.Router();
 const db = require('../persistence/db');
-let deveice_list = require('../persistence/models/deveice_list').config_infoModel(db);
-let controller_infoModel = require('../persistence/models/controller_info').controller_infoModel(db);
-let deveice_infoTable = require('../persistence/models/deveice_info');
-hashmapFrontendtoIot = {
-    cntId:"device_id",
-    cntName:"device_name",
-    address:"device_address",
-    devId:"eqp_device_id",
-    devName:"eqp_device_name",
-    devType:"eqp_type_name",
-    type:"type",
-    status:'del_flag'
+let machine_model = require('../persistence/models/machine');
+
+//REST API
+router.post("/machine/getMachineState",     getMachineState);
+router.post("/machine/setMachineState",     setCntListRouter);
+router.post("/machine/delMAchine",          delCntListRouter);
+router.post("/machine/getMultiTableData",   getDevListRouter);
+router.post("/machine/setMultiTableData",   getNewDataRouter);
+
+// function
+
+function checkInput(req, body_fields, header_fields){
+    if(body_fields != undefined){
+        for(field of body_fields) {
+            if(field in body_fields){
+               continue; 
+            }else{
+                throw  new Error();
+            }
+        }
+    }
+    if(header_fields == undefined){
+        return ;
+    }
+    for(header of header_fields){
+        if(header in header_fields){
+            continue; 
+         }else{
+            throw  new Error();
+         }
+    }
 }
 
-hashmapIotToFrontend = {
-    device_id :"cntId",
-    device_name : "cntName",
-    device_address : "address",
-    eqp_device_id : "devId",
-    eqp_device_name : "devName",
-    eqp_type_name : "devType",
-    del_flag : "status"
-}
+function responseOK(res, data){
+    if(data == undefined || 
+        res == undefined){
+            throw new Error("data or data id undefined");
+    }
+    let json = {
 
-ord = {
-    "+": "ASC",
-    "-": "DESC",
+    }
+    res.status(200);
+    res.json(json);
+    res.end();
 }
-router.post("/getDevList",getDevListRouter);
-router.post("/getCntList",getCntListRouter);
-router.post("/setCntInfo",setCntListRouter);
-router.post("/delCntInfo",delCntListRouter);
-router.post("/getDevList",getDevListRouter);
-router.post("/getNewData",getNewDataRouter);
+function responseErr(res,err){
+    if(err == undefined || 
+        res == undefined){
+            throw new Error("data or data id undefined");
+    }
+    let json = {
+        info : err.message
+    }
+    if(err.code == undefined){
+        res.status(500);
+    }
+    res.json(json);
+    res.end();
+}
+async function getMachineState(req, res){
+    try{
+        let wanted_body_fields = [];
+        let wanted_header_fields = [];
+        checkInput(req, wanted_body_fields, wanted_header_fields);
+        let data = await queryDb();
+        responseOK(res, data);
+    }catch(err){
+        console.log(err.message);
+        responseErr(res, err);
+    }
+} 
 
 async function getNewDataRouter(req, res){
     try{
@@ -42,10 +79,6 @@ async function getNewDataRouter(req, res){
         let device_model = deveice_infoTable.deviceModel(db,QueryCondition.eqp_type_name);
         let device_infos = await device_model.findAll({
             where:QueryCondition.whereCondition,
-            // attributes: [hashmapFrontendtoIot.cntId,
-            //             hashmapFrontendtoIot.devId,
-            //             hashmapFrontendtoIot.devType],
-            // order: [[hashmapFrontendtoIot[sort], ord[req.body.sort[0]]]]
         });
         let data = [];
         let headers = [];
@@ -90,11 +123,8 @@ function generateRes(list) {
 async function getFromModelAndGeneratList(whereCondition, sort, req) {
     let device_infos = await deveice_list.findAll({
         where: whereCondition,
-        attributes: [hashmapFrontendtoIot.devId,
-        hashmapFrontendtoIot.devName,
-        hashmapFrontendtoIot.devType,
-        hashmapFrontendtoIot.status],
-        order: [[hashmapFrontendtoIot[sort], ord[req.body.sort[0]]]]
+        attributes: ["device_id","device_name","temperature"],
+        order: [[[req.body.sort.category], req.body.sort.max]]
     });
     list = [];
     for (dev of device_infos) {
@@ -192,63 +222,6 @@ async function getControllerList(req){
     });
     return {ldata: all_controller_info.rows,count:all_controller_info.count};
 }
-async function getCntListRouter(req, res){
-    try{
-        await updateAdminTable(req);
-        let list = await getControllerList(req);
-        let json = {};
-        json.code = 0;
-        json.data = list.ldata; 
-        json.total = list.count;
-
-        normalResponse(res,json);
-    }catch(err){
-        console.log(err.message)
-    }
-}
-
-async function updateAdminTable(req) {
-    let all_controller_info = await controller_infoModel.findAndCountAll({
-        attributes: ['device_id'],
-    });
-    let controllers = await deveice_list.findAll({
-        attributes: ['device_id'],
-        group: ['device_id'],
-    });
-    total = all_controller_info.count;
-    for (i of controllers) {
-        let has = false;
-        for (j of all_controller_info.rows) {
-            if (i.device_id == j.device_id) {
-                has = true;
-            }
-        }
-        if (!has) {
-            total++;
-            controller_infoModel.create({
-                device_id: i.device_id
-            });
-        }
-    }
-}
-
-// function getDevListRouter(req,res){
-//     console.log("getDevList:",req.body);
-//     let errRes = {};
-
-//     try{
-//         if(!isAuthorized()){
-//             let err =  new Error("unAuthorize");
-//             err.code = 401;
-//             throw err;
-//         }
-
-//         queryData();
-//         reponseData();
-//     }catch(err){
-//         ErrResponse(res, err);
-//     }
-// }
 
 function ErrResponse(res, errRes){
     res.shouldKeepAlive = false;
@@ -261,4 +234,9 @@ function ErrResponse(res, errRes){
     res.end();
   }
 
+//去重,只返回指定属性
+// let controllers = await deveice_list.findAll({
+//      attributes: ['device_id',‘device_name'],
+//      group: ['device_id'],
+// });
 module.exports = router;

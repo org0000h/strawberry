@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const app = require('../app');
 const http = require('http');
+const db = require('../persistence/db');
+require("../persistence/loadModels");
 const {
   normalizePort,
   onError,
@@ -13,9 +15,17 @@ app.set('port', port);
 
 let server = http.createServer(app);
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening',()=>{
     console.log('listening on port:' + port);
+});
+
+db.sync()
+.then(()=>{
+    console.log("\r\n Data base init done");
+    server.listen(port);
+})
+.catch((e) => { 
+    console.log(`failed:${e}`); process.exit(0); 
 });
 

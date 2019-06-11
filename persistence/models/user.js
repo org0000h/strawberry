@@ -9,6 +9,4 @@ const User = db.define('user', {
   tableName: 'user_table'
 });
 
-
-
 module.exports = User;

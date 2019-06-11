@@ -4,7 +4,7 @@ const fs = require('fs');
 
 var config = null;
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'dev') {
     console.log(`Load dataBase config ${Config_dev}...`);
     config = require(Config_dev);
 } else {

@@ -6,32 +6,21 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "https_websocket_server_launcher",
-            "program": "${workspaceFolder}/launcher/https_websocket_server_launcher.js",
+            "name": "launcher_https_websocket_server",
+            "program": "${workspaceFolder}/launcher/launcher_https_websocket_server.js",
             "env":{
-                // "NODE_ENV": "test"
+                // "NODE_ENV": "dev"
             }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "http_server_launcher",
-            "program": "${workspaceFolder}/launcher/http_server_launcher.js",
+            "name": "launcher_http_server",
+            "program": "${workspaceFolder}/launcher/launcher_http_server.js",
             "env":{
-                "NODE_ENV": "test",
+                "NODE_ENV": "dev",
                 "PORT":"4443"
             }
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "current file",
-            "program": "${file}",
-            "env":{
-                "NODE_ENV": "test",
-                "PORT":"4443"
-            }
-            
         },
         {
             "name": "Attach docker",
@@ -48,7 +37,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "high_concurrency_https_websocket_server_launcher",
+            "name": "launcher_https_websocket_high_concurrency_server",
             "runtimeArgs": [
                 "--nouse-idle-notification",
                 "--max-old-space-size=8192",
@@ -59,7 +48,7 @@
                 "NODE_ENV": "concurrency",
                 "PORT":"443"
             },
-            "program": "${workspaceFolder}/launcher/high_concurrency_https_websocket_server_launcher.js"
+            "program": "${workspaceFolder}/launcher/launcher_https_websocket_high_concurrency_server.js"
         },
     ]
 }
