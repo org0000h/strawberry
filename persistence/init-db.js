@@ -1,5 +1,10 @@
-const model = require('./model.js');
-model.sync();
+const model = require('./models/user');
+const db = require('./db');
 
-console.log('init db ok.');
-process.exit(0);
+db.sync()
+.then(()=>{
+    console.log("\r\n Data base init done");process.exit(0);
+})
+.catch((e) => { 
+    console.log(`failed:${e}`); process.exit(0); 
+});
