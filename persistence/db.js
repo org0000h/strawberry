@@ -9,5 +9,6 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     acquire: 30000,
     idle: 10000
   },
+  logging: config.logging
 });
 module.exports = sequelize;

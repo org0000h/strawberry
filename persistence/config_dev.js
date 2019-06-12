@@ -4,7 +4,8 @@ var config = {
     username: 'postgres',
     password: 'google',
     host: 'localhost',
-    port: 5432
+    port: 5432,
+    logging: true
 };
 
 module.exports = config;

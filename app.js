@@ -14,7 +14,7 @@ app.use(logger('common'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'web_pages')));
+app.use(express.static(path.join(__dirname, './vue-admin-template/dist')));
 
 app.use('/', machine);
 app.use('/', user);
