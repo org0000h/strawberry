@@ -29,7 +29,7 @@ server.on('listening',()=>{
   console.log('listening on port:' + port);
 });
 
-if (process.env.RDB === 'has') {
+if (process.env.RDB == 'has') {
   const db = require('../persistence/db');
   require("../persistence/loadModels");
   db.sync()
