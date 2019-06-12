@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 const db = require('../persistence/db');
 let machine_model = require('../persistence/models/machine');
+let auth = require('../others/auth');
 
 //REST API
 router.post("/machine/getMachineState",     getMachineState);
@@ -69,6 +70,7 @@ async function getMachineState(req, res){
         let wanted_body_fields = [];
         let wanted_header_fields = [];
         checkInput(req, wanted_body_fields, wanted_header_fields);
+        await auth.isAuthorized(req);
         let data = await queryDb(req);
         responseOK(res, data);
     }catch(err){
@@ -111,7 +113,7 @@ async function getDevListRouter(req, res){
     try{
         let list = await getFromModelAndGeneratList(whereCondition, sort, req);
         let json = generateRes(list); 
-        normalResponse(res,json);
+        responseOK(res,json);
     }catch(err){
         console.log(err.message);
     }
@@ -169,11 +171,11 @@ async function delCntListRouter(req, res){
         let json = {
             "code": code
         }
-        normalResponse(res, json);
+        responseOK(res, json);
     }catch(err){
         err.message = "del failed";
         err.code = 500;
-        ErrResponse(res, err);
+        responseError(res, err);
     }
 }
 
@@ -187,17 +189,17 @@ async function setCntListRouter(req, res){
             "code": 0,
             "message":"can't find this controller"
         }
-        normalResponse(res, json);
+        responseOK(res, json);
 
     }catch(err){
         err.message = "can't find this controller";
         err.code = 404;
-        ErrResponse(res, err);
+        responseError(res, err);
     }
 
 }
 
-function normalResponse(res, json){
+function responseOK(res, json){
     res.json(json)
 }
 function generateNewDataQueryCondition(req){
@@ -227,7 +229,7 @@ async function getControllerList(req){
     return {ldata: all_controller_info.rows,count:all_controller_info.count};
 }
 
-function ErrResponse(res, errRes){
+function responseError(res, errRes){
     res.shouldKeepAlive = false;
     res.status(errRes.code);
     let response_json = {
