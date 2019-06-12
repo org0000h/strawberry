@@ -31,7 +31,7 @@
             "port": 9229,
             "address": "localhost",
             "restart": true,
-            "sourceMaps": false,
+            // "sourceMaps": false,
             "outDir": null,
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/wishapp"
