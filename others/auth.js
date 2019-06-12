@@ -28,7 +28,13 @@ authorization.saveTokenVersion = (version, userm) => {
     userm.update({ token_version: version});
   }
 
-
+authorization.createToken = (secret, userId, version) => {
+    let token = jwt.sign({
+      user: userId,
+      token_version: version.toString()
+  }, secret, { expiresIn: 60 * 60 * 24 * 15 });
+  return token;
+}
   authorization.isAuthorized = async (req) => {
     if(req.headers.authorization == undefined){
             err = new Error;

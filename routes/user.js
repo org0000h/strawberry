@@ -95,15 +95,6 @@ function ResponseUserLoginOK(res, token){
   res.end();
 }
 
-function generateToken(secret, userId, version){
-    let token = jwt.sign({
-      user: userId,
-      token_version: version.toString()
-  }, secret, { expiresIn: 60 * 60 * 24 * 15 });
-  return token;
-}
-
-
 async function  userLoginRouter(req, res){
   console.log("login:",req.body);
   try{
@@ -117,7 +108,7 @@ async function  userLoginRouter(req, res){
     auth.saveTokenVersion(userTokenVersion,userm);
     let tokenPayload = auth.createTokenPayload(user.userId,userTokenVersion);
     let secret = await auth.createSecret(tokenPayload, SALT);
-    let token = generateToken(secret, user.userId, userTokenVersion);
+    let token = auth.createToken(secret, user.userId, userTokenVersion);
     ResponseUserLoginOK(res, token);
     return;
   }catch(err){
