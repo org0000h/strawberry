@@ -6,10 +6,12 @@ let auth = require('../others/auth');
 
 //REST API
 router.post("/machine/getMachineState",     getMachineState);
-router.post("/machine/setMachineState",     setCntListRouter);
-router.post("/machine/delMAchine",          delCntListRouter);
-router.post("/machine/getMultiTableData",   getDevListRouter);
-router.post("/machine/setMultiTableData",   getNewDataRouter);
+
+//todo 
+// router.post("/machine/setMachineState",     setCntListRouter);
+// router.post("/machine/delMAchine",          delCntListRouter);
+// router.post("/machine/getMultiTableData",   getDevListRouter);
+// router.post("/machine/setMultiTableData",   getNewDataRouter);
 
 // function
 
