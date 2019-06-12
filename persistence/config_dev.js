@@ -1,11 +1,11 @@
 var config = {
     dialect: 'postgres',
-    database: 'postgres',
+    database: 'RDB',
     username: 'postgres',
     password: 'google',
     host: 'localhost',
     port: 5432,
-    logging: true
+    logging: console.log
 };
 
 module.exports = config;

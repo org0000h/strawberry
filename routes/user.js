@@ -23,51 +23,68 @@ class REQ_USER{
     }
   }
 
-  isMatchPasswd(passwd){
+  checkPasswd(passwd){
     if(this.exist){
-      if(passwd == this.password){ return true;
-      }else{
-        return false;
+      if(passwd != this.password){ 
+        let err = new Error("user wrong password");
+        errRes.code = 401;
+        throw err;
       }
     }else{
-      return false;
+      let err = new Error("user is not exist");
+      errRes.code = 401;
+      throw err;
     }
   }
 
-  isExist(){
-    return this.exist;
+  checkExist(){
+    if(!this.exist){
+      let err = new Error("user not exist");
+      errRes.code = 404;
+      throw err;
+    }
+  }
+}
+function checkInput(req, body_fields, header_fields){
+  if(body_fields != undefined){
+      for(field of body_fields) {
+          if(field in req.body){
+             continue; 
+          }else{
+              throw  new Error();
+          }
+      }
+  }
+  if(header_fields == undefined){
+      return ;
+  }
+  for(header of header_fields){
+      if(header in req.headers){
+          continue; 
+       }else{
+          throw  new Error();
+       }
   }
 }
 
-function isInputLoginComplete(req){
-  if(req.body.userId == undefined ||
-    typeof (req.body.userId) != "string"|| 
-    req.body.password == undefined ||
-    typeof (req.body.password) != "string"){
-      return false;
-    }else{
-      return true;
-    }
-}
 
 
-
-function saveVersion(version, userm){
-  userm.update({ token_version: version});
-}
-
-function ErrResponse(res, errRes){
+function ResponseError(res, errRes){
   res.shouldKeepAlive = false;
-  res.status(errRes.code);
+  let code = 500;
+  if(errRes.code != undefined){
+    code = errRes.code;
+  }
+  res.status(code);  
   let response_json = {
-    code:errRes.code,
+    code:code,
     message:errRes.message
   }
-  res.json(errRes);
+  res.json(response_json);
   res.end();
 }
 
-function NormalResponseUserLogin(res, token){
+function ResponseUserLoginOK(res, token){
   let response_json = {
     code: 0,
     "token": token
@@ -91,40 +108,23 @@ async function  userLoginRouter(req, res){
   console.log("login:",req.body);
   let errRes = {};
   try{
-    if(!isInputLoginComplete(req)){
-      let err = new Error("request not complete");
-      errRes.code = 400;
-      console.log(errRes.message);
-      throw err;
-    }
-
+    let body_fields = ["password","userId"];
+    checkInput(req, body_fields);
     let userm = await userModel.findOne({ where: {user_id:req.body.userId} });
     let user = new REQ_USER(req,userm);
+    user.checkExist();
+    user.checkPasswd(req.body.password);
 
-    if(!user.isExist()){
-      let err = new Error("user not exist");
-      errRes.code = 404;
-      console.log(errRes.message);
-      throw err;
-    }
-    
-    if(!user.isMatchPasswd(req.body.password)){
-      let err = new Error("user wrong password");
-      errRes.code = 401;
-      console.log(errRes.message);
-      throw err;
-    }
     let userTokenVersion = Date.now();
-    saveVersion(userTokenVersion,userm);
+    auth.saveTokenVersion(userTokenVersion,userm);
     let tokenPayload = auth.createTokenPayload(user.userId,userTokenVersion);
- 
     let secret = await auth.createSecret(tokenPayload, SALT);
-
     let token = generateToken(secret, user.userId, userTokenVersion);
-    NormalResponseUserLogin(res, token);
+    ResponseUserLoginOK(res, token);
     return;
   }catch(err){
-    ErrResponse(res, err);
+    console.log(err.message);
+    ResponseError(res, err);
   }
 
 }

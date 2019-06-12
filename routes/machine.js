@@ -15,7 +15,7 @@ router.post("/machine/setMultiTableData",   getNewDataRouter);
 function checkInput(req, body_fields, header_fields){
     if(body_fields != undefined){
         for(field of body_fields) {
-            if(field in body_fields){
+            if(field in req.body){
                continue; 
             }else{
                 throw  new Error();
@@ -26,13 +26,13 @@ function checkInput(req, body_fields, header_fields){
         return ;
     }
     for(header of header_fields){
-        if(header in header_fields){
+        if(header in req.headers){
             continue; 
          }else{
             throw  new Error();
          }
     }
-}
+  }
 
 function responseOK(res, data){
     if(data == undefined || 

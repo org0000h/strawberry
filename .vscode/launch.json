@@ -9,7 +9,7 @@
             "name": "launcher_https_websocket_server",
             "program": "${workspaceFolder}/launcher/launcher_https_websocket_server.js",
             "env":{
-                // "NODE_ENV": "dev",
+                "NODE_ENV": "dev",
                  "RDB": "has"
             }
         },

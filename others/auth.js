@@ -52,4 +52,8 @@ authorization.createTokenPayload = (userId,version) => {
     return JSON.stringify(payload);
 }
 
+authorization.saveTokenVersion = (version, userm) => {
+    userm.update({ token_version: version});
+  }
+
 module.exports = authorization;
