@@ -113,7 +113,6 @@ async function  userLoginRouter(req, res){
     let user = new REQ_USER(req,userm);
     user.checkExist();
     user.checkPasswd(req.body.password);
-
     let userTokenVersion = Date.now();
     auth.saveTokenVersion(userTokenVersion,userm);
     let tokenPayload = auth.createTokenPayload(user.userId,userTokenVersion);

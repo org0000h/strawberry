@@ -39,11 +39,8 @@ function responseOK(res, data){
         res == undefined){
             throw new Error("data or data id undefined");
     }
-    let json = {
-
-    }
     res.status(200);
-    res.json(json);
+    res.json(data);
     res.end();
 }
 function responseErr(res,err){
@@ -60,12 +57,19 @@ function responseErr(res,err){
     res.json(json);
     res.end();
 }
+async function queryDb(req){
+    //todo
+    return {
+        "mocket_data":"qwer1234"
+    };
+}
+
 async function getMachineState(req, res){
     try{
         let wanted_body_fields = [];
         let wanted_header_fields = [];
         checkInput(req, wanted_body_fields, wanted_header_fields);
-        let data = await queryDb();
+        let data = await queryDb(req);
         responseOK(res, data);
     }catch(err){
         console.log(err.message);
