@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./launcher/https_websocket_server_launcher.js",
-    "debug": "node --inspect-brk=0.0.0.0  ./launcher/https_websocket_server_launcher.js"
+    "start": "node ./launcher/launcher_https_websocket_server.js",
+    "debug": "node --inspect-brk=0.0.0.0  ./launcher/launcher_https_websocket_server.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.4",

@@ -7,6 +7,6 @@ services:
     - "443:3000"
     - "9229:9229"
     command:
-      npm start
-      # - npm run debug
+      # npm start
+      npm run debug
 
