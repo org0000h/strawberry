@@ -27,12 +27,12 @@ class REQ_USER{
     if(this.exist){
       if(passwd != this.password){ 
         let err = new Error("user wrong password");
-        errRes.code = 401;
+        err.code = 401;
         throw err;
       }
     }else{
       let err = new Error("user is not exist");
-      errRes.code = 401;
+      err.code = 401;
       throw err;
     }
   }
@@ -106,7 +106,6 @@ function generateToken(secret, userId, version){
 
 async function  userLoginRouter(req, res){
   console.log("login:",req.body);
-  let errRes = {};
   try{
     let body_fields = ["password","userId"];
     checkInput(req, body_fields);
