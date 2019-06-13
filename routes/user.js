@@ -4,9 +4,10 @@ let jwt = require('jsonwebtoken');
 let crypto = require('crypto');
 let userModel = require('../persistence/models/user');
 let auth = require("../others/auth");
-
+const check = require('../others/chack_fields');
 //REST API
-router.post('/user/login', userLoginRouter);
+router.post('/user/login',  userLoginRouter);
+router.post('/user/logout', userLogoutRouter);
 
 SALT = "salt9900";
 
@@ -40,38 +41,11 @@ class REQ_USER{
   checkExist(){
     if(!this.exist){
       let err = new Error("user not exist");
-      errRes.code = 404;
+      err.code = 404;
       throw err;
     }
   }
 }
-function checkInput(req, body_fields, header_fields){
-  if(body_fields != undefined){
-      for(field of body_fields) {
-          if(field in req.body){
-             continue; 
-          }else{
-            let err =   new Error("request miss body fields ");
-            err.code = 400;
-            throw err;
-          }
-      }
-  }
-  if(header_fields == undefined){
-      return ;
-  }
-  for(header of header_fields){
-      if(header in req.headers){
-          continue; 
-       }else{
-        let err =   new Error("request miss header ");
-        err.code = 400;
-        throw err;
-       }
-  }
-}
-
-
 
 function ResponseError(res, errRes){
   res.shouldKeepAlive = false;
@@ -103,7 +77,7 @@ async function  userLoginRouter(req, res){
   console.log("login:",req.body);
   try{
     let body_fields = ["password","user_id"];
-    checkInput(req, body_fields);
+    check.checkRequestFields(req, body_fields);
     let userm = await userModel.findOne({ where: {user_id:req.body.user_id} });
     let user = new REQ_USER(req,userm);
     user.checkExist();
@@ -122,8 +96,8 @@ async function  userLoginRouter(req, res){
 
 }
 
-function userLogout(req, res){
-
+function userLogoutRouter(req, res){
+//todo
 }
 
 

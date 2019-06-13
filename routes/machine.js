@@ -3,7 +3,7 @@ let router = express.Router();
 const db = require('../persistence/db');
 let machine_model = require('../persistence/models/machine');
 let auth = require('../others/auth');
-
+const check = require('../others/chack_fields');
 //REST API
 router.post("/machine/getMachineState",     getMachineState);
 
@@ -14,28 +14,6 @@ router.post("/machine/getMachineState",     getMachineState);
 // router.post("/machine/setMultiTableData",   getNewDataRouter);
 
 // function
-
-function checkInput(req, body_fields, header_fields){
-    if(body_fields != undefined){
-        for(field of body_fields) {
-            if(field in req.body){
-               continue; 
-            }else{
-                throw  new Error("request headers ");
-            }
-        }
-    }
-    if(header_fields == undefined){
-        return ;
-    }
-    for(header of header_fields){
-        if(header in req.headers){
-            continue; 
-         }else{
-            throw  new Error("request body fields");
-         }
-    }
-  }
 
 function response(res, data){
     if(data == undefined || 
@@ -74,7 +52,7 @@ async function getMachineState(req, res){
     try{
         let wanted_body_fields = [];
         let wanted_header_fields = [];
-        checkInput(req, wanted_body_fields, wanted_header_fields);
+        check.checkRequestFields(req, wanted_body_fields, wanted_header_fields);
         await auth.isAuthorized(req);
         let data = await queryDb(req);
         response(res, data);

@@ -2,23 +2,9 @@ let crypto = require('crypto');
 let jwt = require('jsonwebtoken');
 const db = require('../persistence/db');
 let userModel = require('../persistence/models/user');
-
+const check = require('../others/chack_fields');
 SALT = "salt9900";
 let authorization = new Object();
-
-function checkAttributes(obj, attributes){
-    if(attributes != undefined){
-        for(field of attributes) {
-            if(field in obj){
-               continue; 
-            }else{
-                throw  new Error(`${field.toString()} is not attribute of ${obj} `);
-            }
-        }
-    }else{
-        throw  new Error(` ${obj.toString()} is undefined`);
-    }
-}
 
 authorization.createSecret =  async (payload, salt) =>{
     return new Promise((resolve,reject) =>{
@@ -55,7 +41,7 @@ authorization.createToken = (secret,payload) => {
     let token = req.headers.authorization.split(' ')[1];
     let payload1 = await jwt.decode(token);
     let attributes = ["user_id"];
-    checkAttributes(payload1,attributes);
+    check.checkAttributesOfObj(payload1,attributes);
     let payload = await authorization.createTokenPayload(payload1.user_id,payload1.token_version);
     let secret = await authorization.createSecret(payload.toString(), SALT);
     try{
