@@ -21,7 +21,7 @@ function checkInput(req, body_fields, header_fields){
             if(field in req.body){
                continue; 
             }else{
-                throw  new Error();
+                throw  new Error("request headers ");
             }
         }
     }
@@ -32,18 +32,21 @@ function checkInput(req, body_fields, header_fields){
         if(header in req.headers){
             continue; 
          }else{
-            throw  new Error();
+            throw  new Error("request body fields");
          }
     }
   }
 
-function responseOK(res, data){
+function response(res, data){
     if(data == undefined || 
         res == undefined){
             throw new Error("data or data id undefined");
     }
+    let response_body = {};
+    response_body.status = 20000;
+    response_body.payload = data;
     res.status(200);
-    res.json(data);
+    res.json(response_body);
     res.end();
 }
 function responseErr(res,err){
@@ -52,7 +55,7 @@ function responseErr(res,err){
             throw new Error("data or data id undefined");
     }
     let json = {
-        info : err.message
+        errorInfo : err.message
     }
     if(err.code == undefined){
         res.status(500);
@@ -63,7 +66,7 @@ function responseErr(res,err){
 async function queryDb(req){
     //todo
     return {
-        "mocket_data":"qwer1234"
+        "mock_data":"qwer1234"
     };
 }
 
@@ -74,7 +77,7 @@ async function getMachineState(req, res){
         checkInput(req, wanted_body_fields, wanted_header_fields);
         await auth.isAuthorized(req);
         let data = await queryDb(req);
-        responseOK(res, data);
+        response(res, data);
     }catch(err){
         console.log(err.message);
         responseErr(res, err);
@@ -115,7 +118,7 @@ async function getDevListRouter(req, res){
     try{
         let list = await getFromModelAndGeneratList(whereCondition, sort, req);
         let json = generateRes(list); 
-        responseOK(res,json);
+        response(res,json);
     }catch(err){
         console.log(err.message);
     }
@@ -173,7 +176,7 @@ async function delCntListRouter(req, res){
         let json = {
             "code": code
         }
-        responseOK(res, json);
+        response(res, json);
     }catch(err){
         err.message = "del failed";
         err.code = 500;
@@ -191,7 +194,7 @@ async function setCntListRouter(req, res){
             "code": 0,
             "message":"can't find this controller"
         }
-        responseOK(res, json);
+        response(res, json);
 
     }catch(err){
         err.message = "can't find this controller";
@@ -201,7 +204,7 @@ async function setCntListRouter(req, res){
 
 }
 
-function responseOK(res, json){
+function response(res, json){
     res.json(json)
 }
 function generateNewDataQueryCondition(req){

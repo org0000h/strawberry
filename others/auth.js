@@ -6,6 +6,19 @@ let userModel = require('../persistence/models/user');
 SALT = "salt9900";
 let authorization = new Object();
 
+function checkAttributes(obj, attributes){
+    if(attributes != undefined){
+        for(field of attributes) {
+            if(field in obj){
+               continue; 
+            }else{
+                throw  new Error(`${field.toString()} is not attribute of ${obj} `);
+            }
+        }
+    }else{
+        throw  new Error(` ${obj.toString()} is undefined`);
+    }
+}
 
 authorization.createSecret =  async (payload, salt) =>{
     return new Promise((resolve,reject) =>{
@@ -16,24 +29,21 @@ authorization.createSecret =  async (payload, salt) =>{
     })
 }
 authorization.createTokenPayload = (userId,version) => {
-    let payload = {
-      "userId" : userId,
-      exp : 1,
+    return payload = {
+      user_id : userId,
+      exp : Math.floor(Date.now() / 1000) + (60 * 60),//1 hour
       token_version : version.toString() 
     }
-    return JSON.stringify(payload);
+   
 }
 
 authorization.saveTokenVersion = (version, userm) => {
     userm.update({ token_version: version});
   }
 
-authorization.createToken = (secret, userId, version) => {
-    let token = jwt.sign({
-      user: userId,
-      token_version: version.toString()
-  }, secret, { expiresIn: 60 * 60 * 24 * 15 });
-  return token;
+authorization.createToken = (secret,payload) => {
+    let token = jwt.sign(payload, secret);
+    return token;
 }
   authorization.isAuthorized = async (req) => {
     if(req.headers.authorization == undefined){
@@ -43,13 +53,13 @@ authorization.createToken = (secret, userId, version) => {
             throw err;
     }
     let token = req.headers.authorization.split(' ')[1];
-    let payload = await jwt.decode(token);
-    let payloadString = await authorization.createTokenPayload(payload.user,payload.token_version);
-    console.log(payloadString);
-    let secret = await authorization.createSecret(payloadString, SALT);
-    console.log("secret : "+secret);
+    let payload1 = await jwt.decode(token);
+    let attributes = ["user_id"];
+    checkAttributes(payload1,attributes);
+    let payload = await authorization.createTokenPayload(payload1.user_id,payload1.token_version);
+    let secret = await authorization.createSecret(payload.toString(), SALT);
     try{
-        let result = await userModel.findByPk(payload.user.toString());
+        let result = await userModel.findByPk(payload.user_id.toString());
         let decoded = jwt.verify(token, secret);//token valid
         if(decoded.token_version != result.token_version){// Not expired
             err = new Error;

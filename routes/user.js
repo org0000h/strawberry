@@ -12,8 +12,8 @@ SALT = "salt9900";
 
 class REQ_USER{
   constructor(req, userm){
-    this.userId = req.body.userId;
-    if(userm == null){//not registed
+    this.user_id = req.body.user_id;
+    if(userm == null){//not exist
       this.exist = false;
     }else{
       this.exist = true;
@@ -51,7 +51,9 @@ function checkInput(req, body_fields, header_fields){
           if(field in req.body){
              continue; 
           }else{
-              throw  new Error();
+            let err =   new Error("request miss body fields ");
+            err.code = 400;
+            throw err;
           }
       }
   }
@@ -62,7 +64,9 @@ function checkInput(req, body_fields, header_fields){
       if(header in req.headers){
           continue; 
        }else{
-          throw  new Error();
+        let err =   new Error("request miss header ");
+        err.code = 400;
+        throw err;
        }
   }
 }
@@ -98,17 +102,17 @@ function ResponseUserLoginOK(res, token){
 async function  userLoginRouter(req, res){
   console.log("login:",req.body);
   try{
-    let body_fields = ["password","userId"];
+    let body_fields = ["password","user_id"];
     checkInput(req, body_fields);
-    let userm = await userModel.findOne({ where: {user_id:req.body.userId} });
+    let userm = await userModel.findOne({ where: {user_id:req.body.user_id} });
     let user = new REQ_USER(req,userm);
     user.checkExist();
     user.checkPasswd(req.body.password);
     let userTokenVersion = Date.now();
     auth.saveTokenVersion(userTokenVersion,userm);
-    let tokenPayload = auth.createTokenPayload(user.userId,userTokenVersion);
-    let secret = await auth.createSecret(tokenPayload, SALT);
-    let token = auth.createToken(secret, user.userId, userTokenVersion);
+    let tokenPayload = auth.createTokenPayload(user.user_id,userTokenVersion);
+    let secret = await auth.createSecret(tokenPayload.toString(), SALT);
+    let token = auth.createToken(secret, tokenPayload);
     ResponseUserLoginOK(res, token);
     return;
   }catch(err){
