@@ -34,7 +34,7 @@
             // "sourceMaps": false,
             "outDir": null,
             "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/wishapp"
+            "remoteRoot": "/strawberry"
         },
         {
             "type": "node",
